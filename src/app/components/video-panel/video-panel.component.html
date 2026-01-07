@@ -1,0 +1,126 @@
+<div class="govt-card overflow-hidden">
+  <div class="p-3 sm:p-4 border-b bg-muted/30">
+    <h2 class="text-base sm:text-lg font-semibold flex items-center gap-2">
+      <lucide-icon name="video" class="w-4 h-4 sm:w-5 sm:h-5 text-primary"></lucide-icon>
+      Live Camera Recording
+    </h2>
+  </div>
+
+  <div class="p-3 sm:p-4">
+    <div class="relative rounded-lg overflow-hidden" style="min-height: 240px">
+      <div class="relative w-full" style="aspect-ratio: 16/9">
+        <video
+          #videoEl
+          autoplay
+          playsinline
+          muted
+          class="absolute inset-0 w-full h-full object-cover"
+          style="display: block; transform: scaleX(1)"
+        ></video>
+
+        <div
+          class="absolute inset-0 flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4 p-6 sm:p-8"
+          *ngIf="!isCameraActive && !isAnalyzing"
+        >
+          <ng-container *ngIf="cameraError; else ready">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-destructive/20 flex items-center justify-center">
+              <lucide-icon name="camera" class="w-7 h-7 sm:w-8 sm:h-8 text-destructive"></lucide-icon>
+            </div>
+            <div class="space-y-1">
+              <p class="text-foreground font-medium text-sm sm:text-base">Camera Access Error</p>
+              <p class="text-muted-foreground text-xs sm:text-sm max-w-[280px]">{{ cameraError }}</p>
+            </div>
+            <button class="px-3 py-2 border rounded-md" (click)="startRecording()">Try Again</button>
+          </ng-container>
+          <ng-template #ready>
+            <ng-container *ngIf="recordingSaved; else idle">
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <lucide-icon name="check-circle" class="w-7 h-7 sm:w-8 sm:h-8 text-primary"></lucide-icon>
+              </div>
+              <div class="space-y-1">
+                <p class="text-primary font-medium text-sm sm:text-base">Recording saved successfully</p>
+                <p class="text-muted-foreground text-xs sm:text-sm">Click "Start AI Analysis" to detect violations</p>
+              </div>
+            </ng-container>
+            <ng-template #idle>
+              <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-muted flex items-center justify-center">
+                <lucide-icon name="camera" class="w-7 h-7 sm:w-8 sm:h-8 text-muted-foreground"></lucide-icon>
+              </div>
+              <div class="space-y-1">
+                <p class="text-foreground font-medium text-sm sm:text-base">Live Camera Recording</p>
+                <p class="text-muted-foreground text-xs sm:text-sm">Tap “Start Recording” to open your camera</p>
+              </div>
+            </ng-template>
+          </ng-template>
+        </div>
+
+        <div
+          class="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-2 bg-destructive px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm text-destructive-foreground font-medium shadow-lg"
+          *ngIf="isRecording"
+        >
+          <span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-destructive-foreground animate-pulse"></span>
+          <span>REC {{ formatTime(recordingTime) }}</span>
+        </div>
+
+        <div
+          class="absolute inset-0 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm"
+          *ngIf="isAnalyzing"
+        >
+          <div class="relative z-10 text-center space-y-3 sm:space-y-4 px-4">
+            <div class="w-12 h-12 sm:w-16 sm:h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <p class="text-foreground font-medium animate-pulse text-sm sm:text-base">
+              AI analyzing recorded traffic footage...
+            </p>
+            <p class="text-muted-foreground text-xs sm:text-sm">Detecting vehicles & violations</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="p-3 sm:p-4 border-t bg-muted/30 space-y-3">
+    <button
+      *ngIf="isRecording"
+      class="w-full text-sm sm:text-base px-4 py-3 rounded-md bg-destructive text-destructive-foreground flex items-center justify-center gap-2"
+      (click)="stopRecording()"
+    >
+      <lucide-icon name="stop-circle" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
+      Stop Recording
+    </button>
+
+    <button
+      *ngIf="!isCameraActive && !recordingSaved && !isRecording"
+      class="w-full text-sm sm:text-base px-4 py-3 rounded-md bg-primary text-primary-foreground flex items-center justify-center gap-2"
+      (click)="startRecording()"
+    >
+      <lucide-icon name="camera" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
+      Start Recording
+    </button>
+
+    <div class="space-y-2" *ngIf="hasRecording && !isRecording && !isCameraActive">
+      <button
+        class="w-full text-sm sm:text-base px-4 py-3 rounded-md bg-green-600 text-white flex items-center justify-center gap-2 disabled:opacity-70"
+        [disabled]="isAnalyzing"
+        (click)="analyze.emit()"
+      >
+        <ng-container *ngIf="isAnalyzing; else analyzeBtn">
+          <div class="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          Analyzing...
+        </ng-container>
+        <ng-template #analyzeBtn>
+          <lucide-icon name="play" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
+          Start AI Analysis
+        </ng-template>
+      </button>
+
+      <button
+        *ngIf="!isAnalyzing"
+        class="w-full text-xs sm:text-sm px-4 py-2 rounded-md border flex items-center justify-center gap-2"
+        (click)="startRecording()"
+      >
+        <lucide-icon name="camera" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></lucide-icon>
+        Record New Footage
+      </button>
+    </div>
+  </div>
+</div>

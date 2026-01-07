@@ -1,0 +1,89 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/40 z-40 flex items-center justify-center px-4">
+  <div class="bg-card rounded-lg border shadow-xl w-full max-w-lg p-6 space-y-6 relative">
+    <button
+      class="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
+      (click)="close()"
+      aria-label="Close"
+    >
+      <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+    </button>
+
+    <div>
+      <h2 class="text-lg font-semibold flex items-center gap-2">
+        <lucide-icon name="send" class="w-5 h-5 text-primary"></lucide-icon>
+        Share Fine Slip
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Send the e-challan to the vehicle owner via SMS or Email.
+      </p>
+    </div>
+
+    <div class="p-3 bg-muted rounded-lg text-center">
+      <p class="text-xs text-muted-foreground">Challan ID</p>
+      <p class="font-mono font-bold text-primary">{{ data.challanId }}</p>
+    </div>
+
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <lucide-icon name="smartphone" class="w-4 h-4 text-primary"></lucide-icon>
+          <span class="font-medium text-sm">Send via SMS</span>
+        </div>
+        <div class="flex gap-2">
+          <input
+            class="flex-1 px-3 py-2 rounded-md border bg-background"
+            placeholder="+91 9876543210"
+            [(ngModel)]="mobile"
+          />
+          <button
+            class="px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            [disabled]="sendingSMS"
+            (click)="sendSMS()"
+          >
+            <div *ngIf="sendingSMS" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <ng-container *ngIf="!sendingSMS">
+              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+              Send
+            </ng-container>
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex items-center gap-2">
+          <lucide-icon name="mail" class="w-4 h-4 text-primary"></lucide-icon>
+          <span class="font-medium text-sm">Send via Email</span>
+        </div>
+        <div class="flex gap-2">
+          <input
+            class="flex-1 px-3 py-2 rounded-md border bg-background"
+            placeholder="user@email.com"
+            type="email"
+            [(ngModel)]="email"
+          />
+          <button
+            class="px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            [disabled]="sendingEmail"
+            (click)="sendEmail()"
+          >
+            <div *ngIf="sendingEmail" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <ng-container *ngIf="!sendingEmail">
+              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+              Send
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-xs text-yellow-700">
+      <span class="font-medium">Demo Mode:</span> No actual SMS/Email will be sent. This is a simulation.
+    </div>
+
+    <div class="flex justify-end">
+      <button class="px-4 py-2 border rounded-md hover:bg-muted" (click)="close()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

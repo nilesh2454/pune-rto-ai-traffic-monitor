@@ -1,0 +1,102 @@
+<div class="govt-card overflow-hidden" *ngIf="data">
+  <div class="p-4 border-b bg-destructive/5 flex items-center justify-between">
+    <h2 class="text-lg font-semibold flex items-center gap-2 text-destructive">
+      <lucide-icon name="alert-triangle" class="w-5 h-5"></lucide-icon>
+      Violation Detected
+    </h2>
+    <span class="govt-badge govt-badge-violation animate-pulse">NEW</span>
+  </div>
+
+  <div class="p-4 space-y-4">
+    <div class="flex items-center gap-3 p-3 bg-muted rounded-lg">
+      <lucide-icon name="file-text" class="w-5 h-5 text-primary"></lucide-icon>
+      <div>
+        <p class="text-xs text-muted-foreground">Challan ID</p>
+        <p class="font-mono font-bold text-primary">{{ data.challanId }}</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <lucide-icon [name]="vehicleIcon" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Vehicle Number</p>
+            <p class="font-mono-plate font-bold text-lg">{{ data.plateNumber }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <lucide-icon name="user" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Owner Name</p>
+            <p class="font-semibold">{{ data.ownerName }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <lucide-icon name="phone" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Mobile</p>
+            <p class="font-medium">{{ data.mobile }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <lucide-icon name="mail" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Email</p>
+            <p class="font-medium text-sm truncate">{{ data.email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <lucide-icon name="map-pin" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Location</p>
+            <p class="font-medium">{{ data.location }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <lucide-icon name="clock" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Date & Time</p>
+            <p class="font-medium">{{ data.timestamp }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3" *ngIf="data.speed > 0">
+          <lucide-icon name="gauge" class="w-5 h-5 text-muted-foreground"></lucide-icon>
+          <div>
+            <p class="text-xs text-muted-foreground">Speed</p>
+            <p class="font-medium">
+              <span class="text-destructive font-bold">{{ data.speed }} km/h</span>
+              <span class="text-muted-foreground"> / {{ data.speedLimit }} km/h limit</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <p class="text-sm font-medium text-muted-foreground">Violations</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="govt-badge govt-badge-violation" *ngFor="let violation of data.violations">
+          {{ violation }}
+        </span>
+      </div>
+    </div>
+
+    <div class="p-4 bg-destructive/10 rounded-lg border border-destructive/20">
+      <div class="flex items-center justify-between">
+        <span class="text-sm font-medium text-destructive">Total Fine Amount</span>
+        <span class="text-2xl font-bold text-destructive">
+          ₹{{ data.fineAmount.toLocaleString('en-IN') }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

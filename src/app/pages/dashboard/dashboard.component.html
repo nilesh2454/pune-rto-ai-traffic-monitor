@@ -1,0 +1,158 @@
+<div class="min-h-screen bg-background">
+  <app-header></app-header>
+
+  <main class="container mx-auto px-4 py-6 space-y-6">
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <app-stats-card
+        title="Vehicles Scanned"
+        [value]="statsValue?.vehiclesScanned || 0"
+        icon="car"
+        trend="Today"
+      />
+      <app-stats-card
+        title="Violations Detected"
+        [value]="statsValue?.violationsDetected || 0"
+        icon="alert-triangle"
+        trend="Active cases"
+        variant="warning"
+      />
+      <app-stats-card
+        title="Total Fine Amount"
+        [value]="'₹' + ((statsValue?.totalFineAmount || 0).toLocaleString('en-IN'))"
+        icon="indian-rupee"
+        trend="Collected"
+        variant="success"
+      />
+    </section>
+
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <app-video-panel
+        [isAnalyzing]="isAnalyzing()"
+        [hasRecording]="hasRecording()"
+        (analyze)="handleAnalyze()"
+        (recordingComplete)="onRecordingComplete()"
+      />
+
+      <div class="space-y-4">
+        <ng-container *ngIf="currentViolation(); else noResult">
+          <app-violation-card [data]="currentViolation()!"></app-violation-card>
+
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button
+              class="flex-1 px-4 py-3 border rounded-md flex items-center justify-center gap-2"
+              (click)="toggleFineSlip()"
+            >
+              <lucide-icon name="file-text" class="w-4 h-4"></lucide-icon>
+              {{ showFineSlip() ? 'Hide' : 'View' }} Fine Slip
+              <lucide-icon [name]="showFineSlip() ? 'chevron-up' : 'chevron-down'" class="w-4 h-4"></lucide-icon>
+            </button>
+            <button
+              class="flex-1 px-4 py-3 rounded-md bg-primary text-primary-foreground flex items-center justify-center gap-2 disabled:opacity-70"
+              [disabled]="isDownloading()"
+              (click)="handleDownloadPDF()"
+            >
+              <div *ngIf="isDownloading()" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <ng-container *ngIf="!isDownloading()">
+                <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+                Download PDF
+              </ng-container>
+            </button>
+            <button
+              class="flex-1 px-4 py-3 rounded-md bg-secondary text-foreground flex items-center justify-center gap-2"
+              (click)="showShareModal.set(true)"
+            >
+              <lucide-icon name="share-2" class="w-4 h-4"></lucide-icon>
+              Share
+            </button>
+          </div>
+
+          <button
+            class="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground border rounded-md px-4 py-3 flex items-center justify-center gap-2"
+            (click)="startNewRecording()"
+          >
+            <lucide-icon name="camera" class="w-4 h-4"></lucide-icon>
+            Start New Recording
+          </button>
+        </ng-container>
+
+        <ng-template #noResult>
+          <div *ngIf="noViolationDetected(); else idleCard" class="govt-card p-8 text-center bg-green-50 border-green-200">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+              <lucide-icon name="check-circle" class="w-8 h-8 text-green-600"></lucide-icon>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-green-700">
+              ✅ No Violation Detected
+            </h3>
+            <p class="text-green-600 mb-4">
+              The vehicle is following all traffic rules.
+            </p>
+            <div class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <lucide-icon name="check-circle" class="w-4 h-4"></lucide-icon>
+              No Fine Allotted
+            </div>
+            <button
+              class="border-primary text-primary hover:bg-primary hover:text-primary-foreground border rounded-md px-4 py-3 flex items-center justify-center gap-2"
+              (click)="startNewRecording()"
+            >
+              <lucide-icon name="camera" class="w-4 h-4"></lucide-icon>
+              Start New Recording
+            </button>
+          </div>
+          <ng-template #idleCard>
+            <div class="govt-card p-8 text-center">
+              <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
+                <lucide-icon name="car" class="w-8 h-8 text-muted-foreground"></lucide-icon>
+              </div>
+              <h3 class="text-lg font-semibold">No Active Detection</h3>
+              <p class="text-muted-foreground">
+                Record traffic footage and click "Start AI Analysis" to detect violations.
+              </p>
+            </div>
+          </ng-template>
+        </ng-template>
+      </div>
+    </section>
+
+    <section *ngIf="currentViolation() && showFineSlip()" class="animate-in fade-in slide-in-from-top-4 duration-300">
+      <div class="govt-card p-4 md:p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold flex items-center gap-2">
+            <lucide-icon name="file-text" class="w-5 h-5 text-primary"></lucide-icon>
+            E-Challan Preview
+          </h2>
+          <div class="flex gap-2">
+            <button class="px-3 py-2 rounded-md bg-primary text-primary-foreground flex items-center gap-2 text-sm" (click)="handleDownloadPDF()" [disabled]="isDownloading()">
+              <lucide-icon name="download" class="w-4 h-4"></lucide-icon>
+              <span class="hidden sm:inline">Download</span>
+            </button>
+            <button class="px-3 py-2 rounded-md border flex items-center gap-2 text-sm" (click)="showShareModal.set(true)">
+              <lucide-icon name="share-2" class="w-4 h-4"></lucide-icon>
+              <span class="hidden sm:inline">Share</span>
+            </button>
+          </div>
+        </div>
+        <div class="overflow-auto">
+          <app-fine-slip [data]="currentViolation()!"></app-fine-slip>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <app-violation-table [violations]="violationsList"></app-violation-table>
+    </section>
+  </main>
+
+  <footer class="border-t bg-muted/30 py-6 mt-8">
+    <div class="container mx-auto px-4 text-center text-sm text-muted-foreground">
+      <p>© 2026 Pune Regional Transport Office. All rights reserved.</p>
+      <p class="mt-1">AI Traffic Monitoring System - Demo Version</p>
+    </div>
+  </footer>
+
+  <app-share-modal
+    *ngIf="currentViolation()"
+    [data]="currentViolation()!"
+    [isOpen]="showShareModal()"
+    (closed)="showShareModal.set(false)"
+  ></app-share-modal>
+</div>

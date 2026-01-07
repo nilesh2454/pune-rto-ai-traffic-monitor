@@ -1,0 +1,26 @@
+<div class="fixed top-4 right-4 z-50 space-y-2 w-80 max-w-[90vw]">
+  <div
+    *ngFor="let toast of toasts()"
+    class="rounded-lg border shadow bg-card text-foreground p-4 relative overflow-hidden"
+    [ngClass]="{
+      'border-destructive/60 bg-red-50': toast.variant === 'destructive',
+      'border-success/60 bg-green-50': toast.variant === 'success'
+    }"
+  >
+    <div class="flex items-start gap-3">
+      <div class="flex-1">
+        <p class="font-semibold text-sm">{{ toast.title }}</p>
+        <p class="text-sm text-muted-foreground" *ngIf="toast.description">
+          {{ toast.description }}
+        </p>
+      </div>
+      <button
+        class="text-xs text-muted-foreground hover:text-foreground"
+        (click)="dismiss(toast.id)"
+        aria-label="Close toast"
+      >
+        ✕
+      </button>
+    </div>
+  </div>
+</div>
