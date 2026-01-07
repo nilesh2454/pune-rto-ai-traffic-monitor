@@ -27,9 +27,15 @@ export class VideoPanelComponent implements OnDestroy {
   private recordingTimer: ReturnType<typeof setInterval> | null = null;
 
   async startRecording() {
+    // Prevent double-starts from fast clicks
+    if (this.isRecording) {
+      return;
+    }
+
     try {
       this.cameraError = null;
       this.recordingSaved = false;
+      this.recordingTime = 0;
 
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -46,7 +52,10 @@ export class VideoPanelComponent implements OnDestroy {
       if (this.videoRef?.nativeElement) {
         this.videoRef.nativeElement.srcObject = stream;
         const playPromise = this.videoRef.nativeElement.play();
-        if (playPromise) playPromise.catch(() => undefined);
+        if (playPromise) {
+          // Do not wait/block on play(); just log failures
+          playPromise.catch(err => console.warn('Video play failed:', err));
+        }
       }
 
       const chunks: BlobPart[] = [];
@@ -76,8 +85,17 @@ export class VideoPanelComponent implements OnDestroy {
       }
 
       this.isRecording = true;
-      this.recordingTime = 0;
-      this.recordingTimer = setInterval(() => (this.recordingTime += 1), 1000);
+
+      // Ensure only one timer is running
+      if (this.recordingTimer) {
+        clearInterval(this.recordingTimer);
+      }
+
+      const start = Date.now();
+      this.recordingTimer = setInterval(() => {
+        const elapsedMs = Date.now() - start;
+        this.recordingTime = Math.floor(elapsedMs / 1000);
+      }, 1000);
     } catch (error) {
       console.error('Camera error:', error);
       this.cleanupStreams();

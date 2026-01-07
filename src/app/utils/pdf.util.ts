@@ -8,18 +8,19 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
     throw new Error('Element not found');
   }
 
-  // Clone the element to capture off-screen
+  // Clone the element to capture off-screen with controlled width
   const clone = element.cloneNode(true) as HTMLElement;
   clone.style.position = 'absolute';
   clone.style.left = '-9999px';
   clone.style.top = '0';
-  clone.style.width = element.offsetWidth + 'px';
-  clone.style.height = 'auto';
-  clone.style.overflow = 'visible';
-  clone.style.maxHeight = 'none';
+  clone.style.padding = '16px';
+  clone.style.boxSizing = 'border-box';
+  clone.style.width = '800px'; // fixed width for consistent layout
+  clone.style.maxWidth = '800px';
+  clone.style.background = '#ffffff';
   document.body.appendChild(clone);
 
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 150));
 
   const canvas = await html2canvas(clone, {
     scale: 2,
@@ -35,24 +36,27 @@ export const generatePDF = async (elementId: string, filename: string): Promise<
 
   document.body.removeChild(clone);
 
-  const imgWidth = 210;
-  const pageHeight = 297;
-  const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
   const pdf = new jsPDF('p', 'mm', 'a4');
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const margin = 10;
+  const imgWidth = pageWidth - margin * 2;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
   const imgData = canvas.toDataURL('image/png');
 
+  let position = margin;
   let heightLeft = imgHeight;
-  let position = 0;
 
-  pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  heightLeft -= pageHeight;
+  pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight - margin * 2;
 
+  // Add additional pages by shifting the image up so sections appear on new pages
   while (heightLeft > 0) {
-    position = heightLeft - imgHeight;
     pdf.addPage();
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    position = margin - (imgHeight - heightLeft);
+    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight - margin * 2;
   }
 
   pdf.save(filename);

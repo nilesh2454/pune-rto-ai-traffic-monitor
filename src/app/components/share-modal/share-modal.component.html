@@ -29,14 +29,14 @@
           <lucide-icon name="smartphone" class="w-4 h-4 text-primary"></lucide-icon>
           <span class="font-medium text-sm">Send via SMS</span>
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-col sm:flex-row gap-2">
           <input
-            class="flex-1 px-3 py-2 rounded-md border bg-background"
+            class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background"
             placeholder="+91 9876543210"
             [(ngModel)]="mobile"
           />
           <button
-            class="px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
             [disabled]="sendingSMS"
             (click)="sendSMS()"
           >
@@ -54,15 +54,15 @@
           <lucide-icon name="mail" class="w-4 h-4 text-primary"></lucide-icon>
           <span class="font-medium text-sm">Send via Email</span>
         </div>
-        <div class="flex gap-2">
+        <div class="flex flex-col sm:flex-row gap-2">
           <input
-            class="flex-1 px-3 py-2 rounded-md border bg-background"
+            class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background"
             placeholder="user@email.com"
             type="email"
             [(ngModel)]="email"
           />
           <button
-            class="px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
             [disabled]="sendingEmail"
             (click)="sendEmail()"
           >
