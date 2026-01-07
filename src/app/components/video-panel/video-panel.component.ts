@@ -84,17 +84,15 @@ export class VideoPanelComponent implements OnDestroy {
         }
       }
 
-      this.isRecording = true;
-
       // Ensure only one timer is running
       if (this.recordingTimer) {
         clearInterval(this.recordingTimer);
       }
 
-      const start = Date.now();
-      this.recordingTimer = setInterval(() => {
-        const elapsedMs = Date.now() - start;
-        this.recordingTime = Math.floor(elapsedMs / 1000);
+      this.isRecording = true;
+      this.recordingTime = 0;
+      this.recordingTimer = window.setInterval(() => {
+        this.recordingTime += 1;
       }, 1000);
     } catch (error) {
       console.error('Camera error:', error);
@@ -128,6 +126,7 @@ export class VideoPanelComponent implements OnDestroy {
     this.isRecording = false;
     this.isCameraActive = false;
     this.recordingSaved = true;
+    this.recordingTime = 0;
     this.recordingComplete.emit();
   }
 

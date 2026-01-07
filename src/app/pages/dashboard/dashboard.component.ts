@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -34,6 +34,8 @@ import { ViolationTableComponent } from '../../components/violation-table/violat
 export class DashboardComponent implements OnInit {
   private readonly api = inject(ApiService);
   private readonly toast = inject(ToastService);
+
+  @ViewChild(VideoPanelComponent) videoPanel?: VideoPanelComponent;
 
   stats = signal<DashboardStats | null>(null);
   violations = signal<ViolationData[]>([]);
@@ -74,6 +76,10 @@ export class DashboardComponent implements OnInit {
     this.noViolationDetected.set(false);
     this.showFineSlip.set(false);
     this.hasRecording.set(false);
+
+     // Safely stop any existing recording/stream and immediately start a fresh one
+     this.videoPanel?.stopRecording();
+     this.videoPanel?.startRecording();
   }
 
   toggleFineSlip() {

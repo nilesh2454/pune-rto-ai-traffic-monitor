@@ -1,5 +1,5 @@
-<div *ngIf="isOpen" class="fixed inset-0 bg-black/40 z-40 flex items-center justify-center px-4">
-  <div class="bg-card rounded-lg border shadow-xl w-full max-w-lg p-6 space-y-6 relative">
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/40 z-40 flex items-start justify-center px-4 pt-6">
+  <div class="bg-card rounded-lg border shadow-xl w-full max-w-lg p-6 space-y-6 relative max-h-[90vh] overflow-y-auto">
     <button
       class="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
       (click)="close()"

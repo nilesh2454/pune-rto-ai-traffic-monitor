@@ -88,14 +88,25 @@
       Stop Recording
     </button>
 
-    <button
-      *ngIf="!isCameraActive && !recordingSaved && !isRecording"
-      class="w-full text-sm sm:text-base px-4 py-3 rounded-md bg-primary text-primary-foreground flex items-center justify-center gap-2"
-      (click)="startRecording()"
-    >
-      <lucide-icon name="camera" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
-      Start Recording
-    </button>
+    <div class="space-y-2" *ngIf="!isRecording && !isAnalyzing">
+      <button
+        *ngIf="!isCameraActive && !recordingSaved"
+        class="w-full text-sm sm:text-base px-4 py-3 rounded-md bg-primary text-primary-foreground flex items-center justify-center gap-2"
+        (click)="startRecording()"
+      >
+        <lucide-icon name="camera" class="w-4 h-4 sm:w-5 sm:h-5"></lucide-icon>
+        Start Recording
+      </button>
+
+      <!-- Secondary entry point: behaves exactly like Start Recording -->
+      <button
+        class="w-full text-xs sm:text-sm px-4 py-2 rounded-md border flex items-center justify-center gap-2"
+        (click)="startRecording()"
+      >
+        <lucide-icon name="camera" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></lucide-icon>
+        Start New Recording
+      </button>
+    </div>
 
     <div class="space-y-2" *ngIf="hasRecording && !isRecording && !isCameraActive">
       <button
