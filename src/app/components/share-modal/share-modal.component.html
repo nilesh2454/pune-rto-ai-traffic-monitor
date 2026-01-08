@@ -31,19 +31,19 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-2">
           <input
-            class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background"
+            class="w-full sm:flex-1 px-3 py-2 rounded-md border border-input bg-background hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
             placeholder="+91 9876543210"
             [(ngModel)]="mobile"
           />
           <button
-            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            class="w-full sm:w-auto px-4 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors font-medium shadow-sm"
             [disabled]="sendingSMS"
             (click)="sendSMS()"
           >
             <div *ngIf="sendingSMS" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             <ng-container *ngIf="!sendingSMS">
               <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
-              Send
+              Send SMS
             </ng-container>
           </button>
         </div>
@@ -56,20 +56,20 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-2">
           <input
-            class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background"
+            class="w-full sm:flex-1 px-3 py-2 rounded-md border border-input bg-background hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
             placeholder="user@email.com"
             type="email"
             [(ngModel)]="email"
           />
           <button
-            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-1"
+            class="w-full sm:w-auto px-4 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors font-medium shadow-sm"
             [disabled]="sendingEmail"
             (click)="sendEmail()"
           >
             <div *ngIf="sendingEmail" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             <ng-container *ngIf="!sendingEmail">
               <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
-              Send
+              Send Email
             </ng-container>
           </button>
         </div>
