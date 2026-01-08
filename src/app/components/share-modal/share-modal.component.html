@@ -41,7 +41,7 @@
             (click)="sendSMS()"
           >
             <div *ngIf="sendingSMS" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span *ngIf="!sendingSMS">Send SMS</span>
+            <span class="text-white">{{ sendingSMS ? 'Sending...' : 'Send SMS' }}</span>
           </button>
         </div>
       </div>
@@ -64,7 +64,7 @@
             (click)="sendEmail()"
           >
             <div *ngIf="sendingEmail" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span *ngIf="!sendingEmail">Send Email</span>
+            <span class="text-white">{{ sendingEmail ? 'Sending...' : 'Send Email' }}</span>
           </button>
         </div>
       </div>
