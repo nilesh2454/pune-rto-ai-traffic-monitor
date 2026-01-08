@@ -1,10 +1,7 @@
 <div *ngIf="isOpen" class="fixed inset-0 bg-black/40 z-40 flex items-start justify-center px-4 pt-6">
   <div class="bg-card rounded-lg border shadow-xl w-full max-w-lg p-6 space-y-6 relative max-h-[90vh] overflow-y-auto">
-    <button
-      class="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
-      (click)="close()"
-      aria-label="Close"
-    >
+    <button class="absolute top-3 right-3 text-muted-foreground hover:text-foreground" (click)="close()"
+      aria-label="Close">
       <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
     </button>
 
@@ -30,17 +27,17 @@
           <span class="font-medium text-sm">Send via SMS</span>
         </div>
         <div class="flex flex-col sm:flex-row gap-2">
-          <input
-            class="w-full sm:flex-1 px-3 py-2 rounded-md border border-input bg-background hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
-            placeholder="+91 9876543210"
-            [(ngModel)]="mobile"
-          />
+          <input class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background" placeholder="+91 9876543210"
+            [(ngModel)]="mobile" />
           <button
-            style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; min-width: 100px;"
-            [disabled]="sendingSMS"
-            (click)="sendSMS()"
-          >
-            {{ sendingSMS ? 'Sending...' : 'Send SMS' }}
+            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-white min-w-[100px] h-10 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
+            type="button" [disabled]="sendingSMS" (click)="sendSMS()">
+            <div *ngIf="sendingSMS"
+              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <span *ngIf="!sendingSMS" class="flex items-center gap-2">
+              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+              <span>Send</span>
+            </span>
           </button>
         </div>
       </div>
@@ -51,18 +48,17 @@
           <span class="font-medium text-sm">Send via Email</span>
         </div>
         <div class="flex flex-col sm:flex-row gap-2">
-          <input
-            class="w-full sm:flex-1 px-3 py-2 rounded-md border border-input bg-background hover:border-primary/50 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
-            placeholder="user@email.com"
-            type="email"
-            [(ngModel)]="email"
-          />
+          <input class="w-full sm:flex-1 px-3 py-2 rounded-md border bg-background" placeholder="user@email.com"
+            type="email" [(ngModel)]="email" />
           <button
-            style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; min-width: 100px;"
-            [disabled]="sendingEmail"
-            (click)="sendEmail()"
-          >
-            {{ sendingEmail ? 'Sending...' : 'Send Email' }}
+            class="w-full sm:w-auto px-3 py-2 rounded-md bg-primary text-white min-w-[100px] h-10 flex items-center justify-center gap-2 whitespace-nowrap flex-shrink-0"
+            type="button" [disabled]="sendingEmail" (click)="sendEmail()">
+            <div *ngIf="sendingEmail"
+              class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            <span *ngIf="!sendingEmail" class="flex items-center gap-2">
+              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
+              <span>Send</span>
+            </span>
           </button>
         </div>
       </div>

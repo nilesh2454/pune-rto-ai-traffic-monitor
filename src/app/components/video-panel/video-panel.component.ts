@@ -26,7 +26,7 @@ export class VideoPanelComponent implements OnDestroy {
   private mediaRecorder: MediaRecorder | null = null;
   private recordingTimer: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef) { }
 
   async startRecording() {
     // Prevent double-starts from fast clicks
@@ -95,7 +95,6 @@ export class VideoPanelComponent implements OnDestroy {
       this.recordingTime = 0;
       this.recordingTimer = window.setInterval(() => {
         this.recordingTime += 1;
-        console.log('Timer tick:', this.recordingTime);
         this.cdr.detectChanges();
       }, 1000);
     } catch (error) {
