@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, NgZone } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 
@@ -26,7 +26,7 @@ export class VideoPanelComponent implements OnDestroy {
   private mediaRecorder: MediaRecorder | null = null;
   private recordingTimer: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private ngZone: NgZone) {}
+  constructor(private cdr: ChangeDetectorRef) {}
 
   async startRecording() {
     // Prevent double-starts from fast clicks
@@ -93,13 +93,11 @@ export class VideoPanelComponent implements OnDestroy {
 
       this.isRecording = true;
       this.recordingTime = 0;
-      this.recordingTimer = this.ngZone.runOutsideAngular(() => {
-        return window.setInterval(() => {
-          this.ngZone.run(() => {
-            this.recordingTime += 1;
-          });
-        }, 1000);
-      });
+      this.recordingTimer = window.setInterval(() => {
+        this.recordingTime += 1;
+        console.log('Timer tick:', this.recordingTime);
+        this.cdr.detectChanges();
+      }, 1000);
     } catch (error) {
       console.error('Camera error:', error);
       this.cleanupStreams();
