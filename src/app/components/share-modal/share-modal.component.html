@@ -36,12 +36,11 @@
             [(ngModel)]="mobile"
           />
           <button
-            class="w-full sm:w-auto px-4 py-2 rounded-md bg-blue-600 text-white min-w-[100px] flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors font-medium shadow-sm border-0"
+            style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; min-width: 100px;"
             [disabled]="sendingSMS"
             (click)="sendSMS()"
           >
-            <div *ngIf="sendingSMS" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-white">{{ sendingSMS ? 'Sending...' : 'Send SMS' }}</span>
+            {{ sendingSMS ? 'Sending...' : 'Send SMS' }}
           </button>
         </div>
       </div>
@@ -59,12 +58,11 @@
             [(ngModel)]="email"
           />
           <button
-            class="w-full sm:w-auto px-4 py-2 rounded-md bg-blue-600 text-white min-w-[100px] flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors font-medium shadow-sm border-0"
+            style="background-color: #2563eb; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; min-width: 100px;"
             [disabled]="sendingEmail"
             (click)="sendEmail()"
           >
-            <div *ngIf="sendingEmail" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <span class="text-white">{{ sendingEmail ? 'Sending...' : 'Send Email' }}</span>
+            {{ sendingEmail ? 'Sending...' : 'Send Email' }}
           </button>
         </div>
       </div>
