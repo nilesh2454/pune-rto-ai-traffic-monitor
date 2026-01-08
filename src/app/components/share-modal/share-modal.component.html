@@ -36,15 +36,12 @@
             [(ngModel)]="mobile"
           />
           <button
-            class="w-full sm:w-auto px-4 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors font-medium shadow-sm"
+            class="w-full sm:w-auto px-4 py-2 rounded-md bg-blue-600 text-white min-w-[100px] flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors font-medium shadow-sm border-0"
             [disabled]="sendingSMS"
             (click)="sendSMS()"
           >
             <div *ngIf="sendingSMS" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <ng-container *ngIf="!sendingSMS">
-              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
-              Send SMS
-            </ng-container>
+            <span *ngIf="!sendingSMS">Send SMS</span>
           </button>
         </div>
       </div>
@@ -62,15 +59,12 @@
             [(ngModel)]="email"
           />
           <button
-            class="w-full sm:w-auto px-4 py-2 rounded-md bg-primary text-primary-foreground min-w-[100px] flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors font-medium shadow-sm"
+            class="w-full sm:w-auto px-4 py-2 rounded-md bg-blue-600 text-white min-w-[100px] flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors font-medium shadow-sm border-0"
             [disabled]="sendingEmail"
             (click)="sendEmail()"
           >
             <div *ngIf="sendingEmail" class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            <ng-container *ngIf="!sendingEmail">
-              <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
-              Send Email
-            </ng-container>
+            <span *ngIf="!sendingEmail">Send Email</span>
           </button>
         </div>
       </div>
